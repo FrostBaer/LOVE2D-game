@@ -1,3 +1,5 @@
+-- SOURCE: https://github.com/usysrc/LICK
+--
 -- lick.lua
 --
 -- simple LIVECODING environment for Löve
