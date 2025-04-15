@@ -54,44 +54,54 @@ end
 function love.update(dt)
     -- Player cursor
     player.x, player.y = love.mouse.getPosition()
-
-    -- Cars
-    for _, car in ipairs(cars) do
-        car:update(dt)
-        if car:hit(frog.x, frog.y, frog.width, frog.height) then
-            frog:die()
-            game.state.gameover = true
-            game.state.game = false
-            game.state.pause = false
+    if game.state.game then
+        -- Cars
+        for _, car in ipairs(cars) do
+            car:update(dt)
+            if car:hit(frog.x, frog.y, frog.width, frog.height) then
+                frog:die()
+                game.state.gameover = true
+                game.state.game = false
+                game.state.pause = false
+            end
         end
-    end
 
-    -- Powerups
-    powerup:update(dt)
+        -- Powerups
+        powerup:update(dt)
+    end
 end
 
 function love.draw()
     -- Draw the game state
     if game.state.menu then
-        love.graphics.print("Menu", 10, 10)
+        love.graphics.print("Menu", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
     elseif game.state.game then
         love.graphics.print("Game", 10, 10)
-        --Map 
+        --Map
         Map:draw()
+        --Frog
+        frog:draw()
         -- Cars
         for _, car in ipairs(cars) do
             car:draw()
         end
-
-        --Frog
-        frog:draw()
-
         -- Powerups
         powerup:draw()
     elseif game.state.pause then
         love.graphics.print("Pause", 10, 10)
     elseif game.state.gameover then
-        love.graphics.print("Game Over", 350, 350)
+        love.graphics.setColor(Colours.RED)
+        love.graphics.print("Game Over", 10, 10)
+        --Map
+        Map:draw()
+        --Frog
+        frog:draw()
+        -- Cars
+        for _, car in ipairs(cars) do
+            car:draw()
+        end
+        -- Powerups
+        powerup:draw()
     end
 
     -- Measure FPS
@@ -101,7 +111,6 @@ function love.draw()
     -- Draw the player cursor
     love.graphics.setColor(Colours.WHITE)
     love.graphics.rectangle("line", player.x, player.y, player.width, player.height)
-
 end
 
 function love.keypressed(key)
@@ -116,6 +125,10 @@ function love.keypressed(key)
         if key == "right" then
             frog:right()
         end
+    end
+    if key:lower() == "p" then
+        game.state.pause = not game.state.pause
+        game.state.game = not game.state.game
     end
     if key == "escape" then
         love.event.quit()
