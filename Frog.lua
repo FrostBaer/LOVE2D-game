@@ -2,32 +2,46 @@ local Colour = require("Colours")
 local Frog = Object:extend()
 
 function Frog:new(x, y, speed)
+    self.imageAlive = love.graphics.newImage("images/frog.png")
+    self.imageDead = love.graphics.newImage("images/frog_dead.png")
+    self.imageSize = 0.5
+
     self.x = x
     self.y = y
+    self.width = self.imageAlive:getWidth() * self.imageSize
+    self.height = self.imageAlive:getHeight() * self.imageSize
     self.speed = speed or 100
+    self.alive = true
 end
 
-function Frog:update(dt)  
-    love.keyboard.setKeyRepeat(false)
-    if(love.keyboard.isDown("up")) then
-        self.y = self.y - self.speed * dt
-    end
-    if(love.keyboard.isDown("down")) then
-        self.y = self.y + self.speed * dt
-    end
-    if(love.keyboard.isDown("left")) then
-        self.x = self.x - self.speed * dt
-    end
-    if(love.keyboard.isDown("right")) then
-        self.x = self.x + self.speed * dt
-    end
-    if(love.keyboard.isDown("space")) then
-        self.y = self.y - self.speed * dt * 2
+function Frog:jump()
+    if self.alive then
+        self.y = self.y - self.speed * 2
     end
 end
+
+function Frog:left()
+    if self.alive then
+        self.x = self.x - self.speed
+    end
+end
+
+function Frog:right()
+    if self.alive then
+        self.x = self.x + self.speed
+    end
+end
+
+function Frog:die()
+    self.alive = false
+end
+
 function Frog:draw()
-    love.graphics.setColor(Colour.GREEN)
-    love.graphics.ellipse("fill", self.x, self.y, 25, 15, 16)
-    love.graphics.setColor(Colour.WHITE)
+    if self.alive then
+        love.graphics.draw(self.imageAlive, self.x, self.y, 0, self.imageSize, self.imageSize)
+    else
+        love.graphics.draw(self.imageDead, self.x, self.y, 0, self.imageSize, self.imageSize)
+    end
 end
+
 return Frog
