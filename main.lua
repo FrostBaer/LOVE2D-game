@@ -1,6 +1,7 @@
 local love = require("love")
 local Colours = require("Colours")
 local Map = require("Map")
+local Menu = require("menu")
 local Cars = require("Cars")
 local Frog = require("Frog")
 local Powerups = require("Powerups")
@@ -14,8 +15,8 @@ love.graphics.setFont(Fonts.MENU2)
 
 local game = {
     state = {
-        menu = false,
-        game = true,
+        menu = true,
+        game = false,
         pause = false,
         gameover = false,
     }
@@ -28,6 +29,7 @@ local player = {
     height = 10
 }
 
+local menu = Menu:new()
 local map = Map:new()
 
 local frog = Frog(love.graphics.getWidth() - 400, love.graphics.getHeight() - 50, 10)
@@ -74,7 +76,8 @@ end
 function love.draw()
     -- Draw the game state
     if game.state.menu then
-        love.graphics.print("Menu", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+        -- love.graphics.print("Menu", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+        Menu:draw()
     elseif game.state.game then
         love.graphics.print("Game", 10, 10)
         --Map
@@ -124,6 +127,29 @@ function love.keypressed(key)
         end
         if key == "right" then
             frog:right()
+        end
+    end
+    if game.state.menu then
+        if key == "up" then
+            Menu.selected = Menu.selected - 1
+            if Menu.selected < 1 then
+                Menu.selected = #Menu.options
+            end
+        elseif key == "down" then
+            Menu.selected = Menu.selected + 1
+            if Menu.selected > #Menu.options then
+                Menu.selected = 1
+            end
+        elseif key == "return" then
+            if Menu.selected == 1 then
+                game.state.menu = false
+                game.state.game = true
+                game.state.pause = false
+            elseif Menu.selected == 2 then
+                -- Options menu (not implemented)
+            elseif Menu.selected == 3 then
+                love.event.quit()
+            end
         end
     end
     if key:lower() == "p" then
