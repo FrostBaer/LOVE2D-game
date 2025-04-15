@@ -9,6 +9,7 @@ function Car:new(x, y, width, height, speed, forward)
     self.height = height
     self.speed = speed or 100
     self.forward = forward or true
+    self.type = {"car", "truck", "lkw"}
 end
 
 function Car:update(dt)
@@ -23,9 +24,16 @@ function Car:update(dt)
 end
 
 function Car:draw()
-    love.graphics.setColor(Colours.RED)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-    love.graphics.setColor(Colours.WHITE)
+    -- love.graphics.setColor(Colours.RED)
+    -- love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    -- love.graphics.setColor(Colours.WHITE)
+    if self.type == "car" then
+        love.graphics.draw(love.graphics.newImage("images/car.png"), self.x, self.y, 0, 0.5, 0.5)
+    elseif self.type == "truck" then
+        love.graphics.draw(love.graphics.newImage("images/truck.png"), self.x, self.y, 0, 0.5, 0.5)
+    else 
+        love.graphics.draw(love.graphics.newImage("images/lkw.png"), self.x, self.y, 0, 0.5, 0.5)
+    end
 end
 
 function Car:hit(x, y, width, height)
