@@ -34,22 +34,29 @@ local map = Map:new()
 
 local frog = Frog(love.graphics.getWidth() - 400, love.graphics.getHeight() - 50, 10)
 local powerup = Powerups(0, love.graphics.getHeight() - 100)
-
 local cars = {}
-for i = 1, 10 do
-    local x = math.random(0, love.graphics.getWidth())
-    local y = math.random(0, (love.graphics.getHeight() - 100))
-    local speed = math.random(10, 100)
-    local car = Cars(x, y, 50, 25, speed)
-    table.insert(cars, car)
-end
 
-function love.load()
-    X = 100
-    Y = 100
+
+function love.load()    
     love.window.setMode(800, 600, { resizable = true })
     love.window.setTitle("Frogger")
     love.mouse.setVisible(false)
+
+    math.randomseed(os.time())
+    for i = 1, 10 do
+        math.random()
+    end
+
+    for i = 1, 10 do
+        local x = math.random(0, love.graphics.getWidth())
+        local y = math.random(0, (love.graphics.getHeight() - 100))
+        local speed = math.random(10, 100)
+        local type = i % 3 + 1
+        local car = Cars(x, y, speed, true, type)
+        car:init()
+        print("Car " .. i .. ": " .. car.type .. " width: " .. car.width)
+        table.insert(cars, car)
+    end
 end
 
 -- Game loop
@@ -93,8 +100,6 @@ function love.draw()
     elseif game.state.pause then
         love.graphics.print("Pause", 10, 10)
     elseif game.state.gameover then
-        love.graphics.setColor(Colours.RED)
-        love.graphics.print("Game Over", 10, 10)
         --Map
         Map:draw()
         --Frog
@@ -105,6 +110,8 @@ function love.draw()
         end
         -- Powerups
         powerup:draw()
+        love.graphics.setColor(Colours.RED)
+        love.graphics.printf("Game Over", 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")  
     end
 
     -- Measure FPS
@@ -150,6 +157,14 @@ function love.keypressed(key)
             elseif Menu.selected == 3 then
                 love.event.quit()
             end
+        end
+    end
+    if game.state.gameover then
+        if key == "return" then
+            game.state.gameover = false
+            game.state.menu = true
+            game.state.game = false
+            game.state.pause = false
         end
     end
     if key:lower() == "p" then
