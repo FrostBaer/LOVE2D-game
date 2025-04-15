@@ -5,16 +5,26 @@ function Frog:new(x, y, speed)
     self.x = x
     self.y = y
     self.speed = speed or 100
+    self.alive = true
+end
+
+function Frog:jump()
+    if self.alive then
+        self.y = self.y - self.speed
+    end
 end
 
 function Frog:update(dt)  
-    love.keyboard.setKeyRepeat(false)
-    if(love.keyboard.isDown("up")) then
-        self.y = self.y - self.speed * dt
+    if not self.alive then
+        return
     end
-    if(love.keyboard.isDown("down")) then
-        self.y = self.y + self.speed * dt
-    end
+    --love.keyboard.setKeyRepeat(false)
+    -- if(love.keyboard.isDown("up")) then
+    --     self.y = self.y - self.speed * dt
+    -- end
+    -- if(love.keyboard.isDown("down")) then
+    --     self.y = self.y + self.speed * dt
+    -- end
     if(love.keyboard.isDown("left")) then
         self.x = self.x - self.speed * dt
     end

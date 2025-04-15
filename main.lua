@@ -108,6 +108,9 @@ end
 
 function love.keypressed(key)
     print("Key pressed: " .. key)
+    if key == "up" then
+        frog:jump()
+    end
     if key == "escape" then
         love.event.quit()
     end
