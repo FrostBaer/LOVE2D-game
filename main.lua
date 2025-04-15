@@ -107,6 +107,7 @@ function love.draw()
 end
 
 function love.keypressed(key)
+    print("Key pressed: " .. key)
     if key == "escape" then
         love.event.quit()
     end
