@@ -1,13 +1,15 @@
 local Powerups = Object:extend()
+
 function Powerups:new(x, y)
     self.x = x
     self.y = y
     self.radius = 10
     self.speed = 30
+    self.type = math.random(1, 3)
 end
 
 function Powerups:update(dt)
-    self.x = self.x + self.speed * dt  
+    self.x = self.x + self.speed * dt
     if self.x > love.graphics.getWidth() then
         self.x = -50
         self.y = math.random(0, love.graphics.getHeight() - 100)

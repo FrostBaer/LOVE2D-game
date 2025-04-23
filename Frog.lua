@@ -1,4 +1,5 @@
 local Colour = require("Colours")
+local PowerupTypes = require("Powerups")
 local Frog = Object:extend()
 
 function Frog:new(x, y, speed)
@@ -12,11 +13,22 @@ function Frog:new(x, y, speed)
     self.height = self.imageAlive:getHeight() * self.imageSize
     self.speed = speed or 100
     self.alive = true
+    self.powerup = 1
+end
+
+function Frog:reset()
+    self.x = love.graphics.getWidth() - 400
+    self.y = love.graphics.getHeight() - 50
+    self.alive = true
 end
 
 function Frog:jump()
     if self.alive then
-        self.y = self.y - self.speed * 2
+        if self.powerup == 1 then
+            self.y = self.y - self.speed*2
+        else 
+            self.y = self.y - self.speed
+        end
     end
 end
 
